@@ -1,6 +1,3 @@
-
-
-
 PImage img; 
 ArrayList stars;
 Star shooter;
@@ -20,28 +17,24 @@ void setup() {
     if( random(-1000000/(((float)height)/(j/width+10)),50) >= 0)
       stars.add(new Star( j%width,(int)j/width));
   }
-
+  smooth();
+  noStroke();
 } 
 
 void draw() {
+  image(img,0,0);
   if (random(100) > 0 && shooter == null)
     shooter = new Star((int)random(-width,0), (int)random(-height,0));
-  //noLoop();
-  smooth();
-  image(img,0,0);
 
-//  loadPixels();
   for(int k = 0; k < stars.size(); k++)
     ((Star)stars.get(k)).display();
   if(shooter != null)  
     shooter.shoot();
   if(shooter.x >= width && shooter.y >= height)
     shooter = null;
-//  updatePixels();
-  noStroke();
+    
   fill(175,25,25);
   triangle(width*5/12,height*4/12,width*6/12,height*14/24,width*7/12,height*4/12);
-  //save("test3.png");	
   
 }
 
@@ -49,18 +42,18 @@ void draw() {
 class Star {
   int x;
   int y;
-  int brightness;
+  int bright;
 
   public Star(int x1, int y1) {
     this.x = x1;
     this.y = y1;  
-    this.brightness = (int)random(255);
+    this.bright = (int)random(255);
   }
   public void display() {
     rect(x,y,1,1);
     if(random(0,100) < 1)
-      brightness = (int)random(255);
-    fill(color(255,255,255,brightness));
+      bright = (int)random(255);
+    fill(color(255,255,255,bright));
    // pixels[y*width + x] = color(255,255,255,random(255));
   }
   
@@ -70,20 +63,11 @@ class Star {
     int radius = 5;
 
     int offset = 5;
-    int brightness = (int)random(128,255);
     for(int k = 1; k <= 4; k++) {
-    if ( x >= 0 && x < width && y >= 0 && y < height) {
-      //for(int i = -radius; i < radius; i++) {
-      // for(int j = -radius; j < radius; j++) {
-      //   if ( x+i >= 0 && x+i < width && y+j >= 0 && y+j < height){
-               rect(x,y,1,1);
-               fill(color(255,255,255,random(255/2,255)));
-           //pixels[(y+j)*width + (x+i)] = color(255,255,255,brightness);
-      //   }
-      // }
-      //}
-      //pixels[y*width + x] = color(255,255,255,255);
-    }
+      if ( x >= 0 && x < width && y >= 0 && y < height) {
+        rect(x,y,1,1);
+        fill(color(255,255,255,random(255/2,255)));
+      }
       radius-=1;
       x-=radius;
       y-=radius;
@@ -91,6 +75,4 @@ class Star {
     this.x+=offset;
     this.y+=offset;
   }
-
-
 }
