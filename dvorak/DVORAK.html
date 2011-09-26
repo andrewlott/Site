@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+	<link rel="stylesheet" href="stuff.css" type="text/css" title="no title" charset="utf-8" />
+
+	        <!-- charset must remain utf-8 to be handled properly by Processing -->
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		
+		<title>DVORAK Keyboard Simulator</title>
+		<h1 style = "font-size: xx-large">
+            DVORAK Keyboard Simulator
+        </h1>
+	</head>
+	<body>
+		<div id="content">
+			<div id="DVORAK_container">
+			
+			<!--[if !IE]> -->
+				<object classid="java:DVORAK.class" 
+            			type="application/x-java-applet"
+            			archive="DVORAK.jar"
+            			width="640" height="480"
+            			standby="Loading Processing software..." >
+            			
+					<param name="archive" value="DVORAK.jar" />
+				
+					<param name="mayscript" value="true" />
+					<param name="scriptable" value="true" />
+				
+					<param name="image" value="loading.gif" />
+					<param name="boxmessage" value="Loading Processing software..." />
+					<param name="boxbgcolor" value="#FFFFFF" />
+				
+					<param name="test_string" value="outer" />
+			<!--<![endif]-->
+				
+				<object classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93" 
+						codebase="http://java.sun.com/update/1.5.0/jinstall-1_5_0_15-windows-i586.cab"
+						width="640" height="480"
+						standby="Loading Processing software..."  >
+						
+					<param name="code" value="DVORAK" />
+					<param name="archive" value="DVORAK.jar" />
+					
+					<param name="mayscript" value="true" />
+					<param name="scriptable" value="true" />
+					
+					<param name="image" value="loading.gif" />
+					<param name="boxmessage" value="Loading Processing software..." />
+					<param name="boxbgcolor" value="#FFFFFF" />
+					
+					<param name="test_string" value="inner" />
+					
+					<p>
+						<strong>
+							This browser does not have a Java Plug-in.
+							<br />
+							<a href="http://java.sun.com/products/plugin/downloads/index.html" title="Download Java Plug-in">
+								Get the latest Java Plug-in here.
+							</a>
+						</strong>
+					</p>
+				
+				</object>
+				
+			<!--[if !IE]> -->
+				</object>
+			<!--<![endif]-->
+			
+			</div>
+			
+			<p>
+			
+			</p>
+			
+			<p>
+			Source code: <a href="DVORAK.java">DVORAK.java</a> 
+			</p>
+			
+			<p>
+			Built with <a href="http://processing.org" title="Processing.org">Processing</a>.
+			</p>
+		</div>
+		
+        <!--Google Analytics-->
+		<script type="text/javascript">
+		
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-22699227-1']);
+		  _gaq.push(['_trackPageview']);
+		
+		  (function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		
+		</script>
+	</body>
+</html>
