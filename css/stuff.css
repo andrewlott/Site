@@ -1,18 +1,18 @@
 @font-face {
-	font-family: cool_font;
-	src: url('../font/standard-7-plain-expanded-s.ttf') format("truetype");
+    font-family: cool_font;
+    src: url('../font/standard-7-plain-expanded-s.ttf') format("truetype");
 }
 body {
-	background-image:url('../img/test3.png');
-	background-repeat: repeat-x;
-	background-attachment: fixed;
-	background-position: center;
-	background-size: auto 100%;
-	color: #FFFAF0;
-	font-family: 'cool_font';
-	font-weight: bold;
-	font-size: 29px;
-	text-align: center;
+    background-image:url('../img/test3.png');
+    background-repeat: repeat-x;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: auto 100%;
+    color: #FFFAF0;
+    font-family: 'cool_font';
+    font-weight: bold;
+    font-size: 29px;
+    text-align: center;
 }
  
 img {
@@ -22,6 +22,10 @@ img {
 #some {
     //width: 33%;
     //border:solid;
+}
+
+div#text {
+    z-index: 1;
 }
 
 a:link {color:#8B8878;
