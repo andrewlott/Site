@@ -3,7 +3,7 @@
     src: url('../font/standard-7-plain-expanded-s.ttf') format("truetype");
 }
 body {
-    background-image:url('../img/test3.png');
+    //background-image:url('../img/test3.png');
     //background-image:url(#bkg_canvas);
     background-repeat: repeat-x;
     background-attachment: fixed;
@@ -26,7 +26,7 @@ img {
 }
 
 #text {
-    //position: absolute;
+    position: absolute;
     z-index: 1;
 }
 
