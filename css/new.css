@@ -13,7 +13,7 @@ body {
     font-family: 'cool_font';
     font-weight: bold;
     font-size: 29px;
-    text-align: center;
+    //text-align: center;
 }
  
 img {
@@ -26,8 +26,40 @@ img {
 }
 
 #text {
+    font-size: 20px;
     position: absolute;
+    top: 33%;
+    float: left;
+    z-index: 2;
+    opacity: 0.66;
+    border: solid;
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: #FFFAF0;
+    padding: 5px;
+}
+
+#text:hover {
+    background-color: blue;
+    background-color: rgba(0,0,255,0.5);
+    opacity: 1.0;
+}
+
+#name{
+    padding: 5px;
+    position: fixed;
+    z-index: 2;
+    opacity: 0.0;
+}
+
+#bkg {
+    position: fixed;
+    top: 0px;
+    left: 0px;
     z-index: 1;
+    height: 100%;
+    width: 100%;
+    opacity: 0.0;
 }
 
 a:link {color:#8B8878;

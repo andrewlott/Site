@@ -335,6 +335,8 @@ lastfm = new LastFM({
 	cache     : cache
 });
 
+console.log(lastfm.
+
 function date_compare(a,b){
 	var date1 = a.date;
 	var date2 = b.date;

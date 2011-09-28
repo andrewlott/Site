@@ -51,7 +51,7 @@ class Star {
   }
   public void display() {
     rect(x,y,1,1);
-    if(random(0,100) < 1)
+    if(random(0,500) < 1)
       bright = (int)random(255);
     fill(color(255,255,255,bright));
    // pixels[y*width + x] = color(255,255,255,random(255));

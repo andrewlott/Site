@@ -293,6 +293,9 @@ lastfm = new LastFM({
 	cache     : cache
 });
 
+
+console.log(lastfm.user.getRecommendedEvents({user:'blood and iron'}));
+
 function change_loc() {
 	loc = [];
 	$("#ch_loc").after("<br/><br/><div id=\"loc\" style=\"float:right;border-radius:20px;width:20%\"> </div><br/>");
