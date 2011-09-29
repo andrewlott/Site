@@ -32,10 +32,10 @@ void draw() {
     shooter.shoot();
   if(shooter.x >= width && shooter.y >= height)
     shooter = null;
-    
+  /*    
   fill(175,25,25);
   triangle(width*5/12,height*4/12,width*6/12,height*14/24,width*7/12,height*4/12);
-  
+  */
 }
 
 

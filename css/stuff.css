@@ -5,10 +5,10 @@
 body {
     background-image:url('../img/test3.png');
     //background-image:url(#bkg_canvas);
-    background-repeat: repeat-x;
+    //background-repeat: repeat-x;
     background-attachment: fixed;
     background-position: center;
-    background-size: auto 100%;
+    background-size: cover;
     color: #FFFAF0;
     font-family: 'cool_font';
     font-weight: bold;
