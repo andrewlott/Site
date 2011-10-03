@@ -1,3 +1,2 @@
 User-agent: *
-Disallow:
-Sitemap: http://andrewlott.com/sitemap.xml
+Disallow: /
