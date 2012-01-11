@@ -13,9 +13,9 @@ void setup() {
   //image(img, 0,0);  
   stars = new ArrayList();
   //loadPixels();
-  for(int j = 0; j<width*height; j++) {
-    if( random(-1000000/(((float)height)/(j/width+10)),50) >= 0)
-      stars.add(new Star( j%width,(int)j/width));
+  for(int j = 0; j<width*2*height; j++) {
+    if( random(-1000000/(((float)height)/(j/(2*width)+10)),50) >= 0)
+      stars.add(new Star( j%(width*2),(int)j/(width*2)));
   }
   smooth();
   noStroke();
@@ -23,19 +23,21 @@ void setup() {
 
 void draw() {
   image(img,0,0);
+  translate(-(int)MX/10-(int)width/2,0);
   if (random(100) > 0 && shooter == null)
-    shooter = new Star((int)random(-width,0), (int)random(-height,0));
+    shooter = new Star((int)random(-width/2,0), (int)random(-height,0));
 
   for(int k = 0; k < stars.size(); k++)
     ((Star)stars.get(k)).display();
   if(shooter != null)  
     shooter.shoot();
-  if(shooter.x >= width && shooter.y >= height)
+  if(shooter.x >= width*2 && shooter.y >= height)
     shooter = null;
   /*    
   fill(175,25,25);
   triangle(width*5/12,height*4/12,width*6/12,height*14/24,width*7/12,height*4/12);
   */
+
 }
 
 
@@ -64,7 +66,7 @@ class Star {
 
     int offset = 5;
     for(int k = 1; k <= 4; k++) {
-      if ( x >= 0 && x < width && y >= 0 && y < height) {
+      if ( x >= 0 && x < width*2 && y >= 0 && y < height) {
         rect(x,y,1,1);
         fill(color(255,255,255,random(255/2,255)));
       }
