@@ -9,6 +9,8 @@ ArrayList circles;
 int count;
 int depth;
 boolean textOn;
+boolean paused;
+int rate;
 
 PFont font;
 
@@ -17,7 +19,9 @@ public void setup() {
   //smooth();
   stroke(1);
   textOn = false;
+  paused = false;
   font = loadFont("MonotypeGurmukhi-255.vlw");
+  rate = 250;
   /*
   float r = 0;
   float rad = 0;
@@ -98,7 +102,9 @@ public void keyPressed(){
  else if(key == 'T' || key == 't'){
   textOn = !textOn; 
  }
-
+ else if(key == 'P' || key == 'p'){
+   paused = !paused;
+ }
 }
 
 public void mouseClicked(){
@@ -113,7 +119,7 @@ public void mouseClicked(){
     b.radius = 0.5*(dist(c.center.x,c.center.y,b.center.x,b.center.y)-dist(c.center.x,c.center.y,a.center.x,a.center.y)+dist(b.center.x,b.center.y,a.center.x,a.center.y));
     c.radius = 0.5*(dist(c.center.x,c.center.y,b.center.x,b.center.y)+dist(c.center.x,c.center.y,a.center.x,a.center.y)-dist(b.center.x,b.center.y,a.center.x,a.center.y)); 
     circles.add(outerSoddy(a,b,c));
-    circles.add(innerSoddy(a,b,c));
+    //circles.add(innerSoddy(a,b,c));
     translate(width/2-((Circle)circles.get(3)).center.x,height/2-((Circle)circles.get(3)).center.y);
     for(Object circ : circles) {
      ((Circle) circ).display(); 
@@ -140,8 +146,22 @@ public Circle innerSoddy(Circle a, Circle b, Circle c){
                        ((aa+(area/(s-aa)))*a.center.y+(bb+(area/(s-bb)))*b.center.y+(cc+(area/(s-cc)))*c.center.y)/(aa+(area/(s-aa))+bb+(area/(s-bb))+cc+(area/(s-cc))));
   return new Circle(cInner,rInner);
   }
+
+  Circle outer = a.outer ? a : (b.outer ? b : c);
+  Circle in1 = a.outer ? (b.outer ? c : b) : a;
+  Circle in2 = a.outer ? (b == in1 ? c : b) : (b == in1 ? a : (b.outer ? c : b));
+
+  float rInner = abs((-4*sqrt(pow(in1.radius,4)*pow(in2.radius,3)*pow(outer.radius,3)+
+                             pow(in1.radius,3)*pow(in2.radius,4)*pow(outer.radius,3)+
+                             pow(in1.radius,3)*pow(in2.radius,3)*pow(outer.radius,4))
+                     - in1.radius*in2.radius*outer.radius*(-2*in1.radius*in2.radius-2*in1.radius*outer.radius-2*in2.radius*outer.radius))
+                     / (2*
+                       (sq(in1.radius)*sq(in2.radius)-2*sq(in1.radius)*in2.radius*outer.radius+
+                        sq(in1.radius)*sq(outer.radius)-2*in1.radius*sq(in2.radius)*outer.radius+
+                        sq(in2.radius)*sq(outer.radius)-2*in1.radius*in2.radius*sq(outer.radius))));
+  PVector cInner = new PVector(-1000,-1000);
   println("OUTA");
-  return new Circle(new PVector(-1000,-1000),0);
+  return new Circle(cInner,rInner);
 }
 
 public Circle outerSoddy(Circle a, Circle b, Circle c){
@@ -161,8 +181,11 @@ public Circle outerSoddy(Circle a, Circle b, Circle c){
 //check to make sure they're tangential
 public void draw() {
   background(255);
-  if(circles.size() >= 5.0){
-  if(count%250 == 0) {
+  if(circles.size() >= 4.0){
+  textFont(font);
+  textAlign(LEFT,TOP);
+  text(1+count/rate,0,0);
+  if(count%rate == 0) {
     println("WOO");
     int s = circles.size();
     for(int i = 0; i < s; i++) {
@@ -177,11 +200,14 @@ public void draw() {
       }
     }
   }
+  if(!paused) {
+  println(count++%rate);
+  }
   translate(width/2-((Circle)circles.get(3)).center.x,height/2-((Circle)circles.get(3)).center.y);
   for(int i = 0; i < circles.size(); i++) {
     ((Circle)circles.get(i)).display();
   }
-  println(count++%250);
+
   }
   else{
 
