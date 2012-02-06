@@ -1,7 +1,7 @@
 PImage img; 
 ArrayList stars;
 Star shooter;
-
+int CX;
 void setup() {  
   size(screen.width, screen.height); 
   frameRate(35); 
@@ -19,11 +19,13 @@ void setup() {
   }
   smooth();
   noStroke();
+  CX = width/2;
 } 
 
 void draw() {
+  CX = CX-ceil((int)((CX-MX)/10));
   image(img,0,0);
-  translate(-(int)MX/10-(int)width/2,0);
+  translate(-(int)CX/50,0);
   if (random(100) > 0 && shooter == null)
     shooter = new Star((int)random(-width/2,0), (int)random(-height,0));
 

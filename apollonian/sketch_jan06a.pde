@@ -1,8 +1,8 @@
-//given 3 circles, return the center and radius of the next circle. add this circle to list
-
-//find 3 tangent circles
-//do the rest
-
+/**
+ *
+ *For Angjoo
+ *
+ */
 
 Circle edge;
 ArrayList circles;
