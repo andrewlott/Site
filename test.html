@@ -1,0 +1,116 @@
+<!DOCTYPE html> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang=en> 
+<meta name="google-site-verification" content="yPhfJOH-aY0aawsXorWiPZEBy3f7lEah_w1IQT1g64o" />
+<head> 
+	<title>andrewlott.com</title> 
+	<link rel="stylesheet" href="css/new.css" type="text/css" title="no title" charset="utf-8" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+	<script src="js/processing-1.3.6.min.js"></script>
+	<script>
+	  //Javascript for background
+	  var MX;
+	  var colors = ["red","orange","yellow","green","blue","indigo","violet"];
+	  var i = 0;
+	  var j = 1;
+	  var k = 2;
+	  $(document).ready(function(){
+	  setColor();
+	  //$("#a").animate({color:colors[0]});
+	  //$("#b").animate({color:colors[1]});
+	  $(".wrapper").mousemove(function(e){
+	    MX = e.clientX;
+	  });
+	  });
+	  function setColor() {
+	    $("#a").animate({color:colors[k++%colors.length]},100);
+	    $("#b").animate({color:colors[j++%colors.length]},100);
+	    $("#c").animate({color:colors[i++%colors.length]},100,setColor);
+	  }
+
+	  function toggleBkg() {
+   	   var bkg = $('#bkg_canvas');
+	  if (bkg.length) {
+	  console.log('Background off');
+	  bkg.remove();
+	  }
+	  else {
+	  console.log('Background on');
+	  //bkg = $('<canvas id="bkg_canvas" data-processing-sources="test.pde" height=100% width=100% style="position: fixed; top:0; left:0; z-index: 0;"></canvas>');
+	  $('.wrapper').prepend('<canvas id="bkg_canvas" data-processing-sources="test.pde" height=100% width=100% style="position: fixed; top:0; left:0; z-index: 0;"></canvas>');
+	  bkg = $('#bkg_canvas');
+	  Processing.loadSketchFromSources(bkg, ['test.pde']); //new processing instance?
+	  }
+	  }
+	</script>
+</head>
+<body>
+<div class="wrapper">
+  <canvas id="bkg_canvas" data-processing-sources="test.pde" height=100% width=100% style="position: fixed; top:0; left:0; z-index: 0;"></canvas>
+
+  <div id="bkg"></div>
+  <div id="name">
+    <p> Andrew Lott </p>
+  </div>
+<!--  <div style="width:100%; top: 5%;  position: absolute; text-align: center; line-height: 1px; font-size:39px; z-index:2;"><div id="a">EXPERIMENTS</div><div id="b">EXPERIMENTS</div><div id="c">EXPERIMENTS</div></div> -->
+	<!--<img src = "http://sphotos.ak.fbcdn.net/hphotos-ak-ash2/hs120.ash2/39359_1431535712574_1358310391_31356060_3938735_n.jpg" width="25%" height="50%"/> -->
+	<div class="toplink"><a onClick="toggleBkg();"  style="cursor:pointer">View site with less intense background</a></div>
+	<div id="text">
+
+          <br/>
+          <br/>
+          <dl id="some">
+            <dt id="projects" class="list">Some projects:</dt>
+              <dd><a href = "http://andrewlott.com/dvorak">DVORAK Keyboard Simulator</a></dd>
+              <dd><a href = "http://andrewlott.com/lastfm/lastfm.html">Last.fm Concert Aggregator</a></dd>
+              <dd><a href = "http://andrewlott.com/apollonian">Apollonian Gasket (experimental)</a></dd>
+            <dt id="links" class="list">Some sites:</dt>
+              <dd><a href = "http://www.facebook.com/profile.php?id=1358310391">Facebook</a></dd>
+              <dd><a href = "https://plus.google.com/u/0/118295041737468659124">Google Plus</a></dd>
+              <dd><a href = "http://www.myspace.com/thegreatcaveoffensive">The Great Cave Offensive</a></dd>
+	    <dt id="badges" class="list">Some badges:</dt>
+              <img src="img/badges.png">
+          </dl>
+        </div>
+<!--
+	<dl id="text">
+	  <dt id="projects" class="list">Projects:</dt>
+	    <dd><a href = "http://andrewlott.com/dvorak">DVORAK Keyboard Simulator</a></dd>
+	  <dt id="links" class="list">Sites:</dt>
+	    <dd><a href = "http://andrewlott.com/lastfm/lastfm.html">Last.fm Concert Aggregator (under reconstruction)</a></dd>
+	    <dd><a href = "http://andrewlott.com/apollonian">Apollonian Gasket (experimental)</a></dd>
+	  <dt id="links" class="list">Some sites:</dt>
+	    <dd><a href = "http://www.facebook.com/profile.php?id=1358310391">Facebook</a></dd>
+	    <dd><a href = "http://www.google.com/profiles/andrewlott">Google Profile</a></dd>
+	    <dd><a href = "http://www.myspace.com/thegreatcaveoffensive">The Great Cave Offensive</a></dd>
+-->
+<!--		<a href = "http://www.facebook.com/profile.php?id=1358310391">
+			<img src="facebook.png" border="2" alt="Facebook"</a>
+		<a href = "http://www.last.fm/user/blood%20and%20iron">
+			<img src="lastfm.png" width="56" height="56" border="2" alt="Last.fm"</a>
+		<a href = "http://www.google.com/profiles/andrewlott">
+			<img src="goog.png" width="56" height="56" border="2" alt="Google Profile"</a>
+		<dd><a href = "http://www.myspace.com/thegreatcaveoffensive">The Great Cave Offensive</a></dd>
+		<!--<iframe src="http://users.livejournal.com/pacific_/" width = "1000" height = "400" style = "background-color:#F0F0F0;"><!--</iframe>-->
+<!--
+	  <dt id="badges" class="list">Badges:</dt>
+	    <dd><img src="img/badges.png"></dd>
+        </dl>
+-->
+	<!--Google Analytics-->
+	<script type="text/javascript">
+	
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-22699227-1']);
+	  _gaq.push(['_trackPageview']);
+	
+	  (function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
+</div>
+<!--<div id="footer"> All Rights Reserved </div>-->
+</body>
+</html>
