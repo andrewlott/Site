@@ -1,0 +1,119 @@
+@font-face {
+	font-family: cool_font;
+	src: url('standard-7-plain-expanded-s.ttf') format("truetype");
+}
+head {
+	font-size: 29px;
+	font-family: 'cool_font';
+	font-weight: bold;
+	font-size: 28px;
+}
+body {
+	/*background-image: 'test3.png';*/
+	text-align: center;
+	background-color: #010101;
+	color: #FEFEFE;
+	font-family: 'cool_font';
+	font-weight: bold;
+	font-size: 20px;
+}
+
+footer {
+	text-align: left;
+	width:20%;
+	font-size:12px;
+	bottom:10px;
+	left: 5px;
+}
+
+.search {
+	border: 2px solid #888888;
+	height: 100px;
+	-webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+	
+}
+.search img {
+	padding-top: 5px;
+	padding-left: 5px;
+	height: 90%;
+	width: auto;
+}
+ 
+input {
+	text-align: center;
+	background-color:#010101;
+	border-color:#888888;
+	color:#FEFEFE;
+	font-family: 'cool_font';
+}
+.main {
+	text-align: center;
+	width: 50%;
+	font-size: 1.5em;
+	border-width:2px;
+	border-radius:15px;
+	-moz-border-radius:15px;
+}
+.city{
+width: 300px;
+text-align: center;
+font-size: 18px;
+border-width:2px;
+border-radius:5px;
+-moz-border-radius:7px;
+}
+.country{
+width: 120px;
+text-align: center;
+font-size: 10px;
+border-width:2px;
+border-radius:5px;
+-moz-border-radius:7px;
+}
+
+.img{
+	float: left;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	height: 100%;
+	width: auto;
+}
+
+.event_table{
+	text-align: left;
+	height: 200px;
+	width: 95%;
+	border-radius: 20px;
+}
+
+.cal{
+/*	height: 200px;
+	float: left;
+	border-width: 5px;
+	border-style:solid;
+	border-color: #888888;
+*/
+	width: 265px;
+	text-align: center;
+}
+.info{
+	padding-top: 10px;
+/*	height: 200px;
+	float: left;
+	border-width: 5px;
+	border-style:solid;
+	border-color: #888888;
+*/
+}
+
+a:link {color:#888888;
+		 text-decoration:none}      /* unvisited link */
+a:visited {color:#8F8F8F;
+		 text-decoration:underline}  /* visited link */
+a:hover {color:#888888;
+		 text-decoration:underline}  /* mouse over link */
+a:active {color:#808080;
+		 text-decoration:underline}  /* selected link */
