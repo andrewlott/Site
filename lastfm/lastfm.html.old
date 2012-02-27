@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!--
+ALL CODE PROPERTY OF ANDREW LOTT
+-->
+<head>
+<link rel="stylesheet" href="new.css" type="text/css" title="no title" charset="utf-8" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="lastfm.api.md5.js"></script>
+<script type="text/javascript" src="lastfm.api.js"></script>
+<script type="text/javascript" src="lastfm.api.cache.js"></script>
+<script type="text/javascript" src="json2.js"></script>
+<!--<script type="text/javascript" src="prettyprint.js"></script>-->
+<script type="text/javascript" src="test.js"></script>
+<!--<script type="text/javascript" src="lastfm.js"></script>-->
+<script language="JavaScript" src="http://j.maxmind.com/app/geoip.js"></script>
+</head>
+<body>
+<div id="body">
+<br/><br/><br/><br/>
+<form id = "first">
+  <input  id="username" class = "main" type="text" placeholder = "Username" onKeyPress="return submitenter(this,event)" onSubmit="return submitenter(this,event)" ></input><br/>
+<!--  <input  id="c" type = "text" readonly = "readonly" placeholder = "City" onKeyPress="return submitenter(this,event)" onClick="return test(this)" ></input><br/> -->
+</form><br/><br/>
+</div>
+</body>
+<footer>
+<b>Don't have a Last.fm account?</b><br/><a href="test.html"><small> Click here to input artists manually</small> </a>
+</footer>
+</html> 
