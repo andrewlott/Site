@@ -4,6 +4,7 @@
 <meta name = “viewport” content = “width=device-height, height=device-height”>
 <head> 
 	<title>andrewlott.com</title> 
+	<!--[if IE]><script src="js/excanvas.compiled.js"></script><![endif]-->
 	<link rel="stylesheet" href="css/new.css" type="text/css" title="no title" charset="utf-8" />
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
@@ -30,22 +31,22 @@
 	  }
 
 	  function toggleBkg() {
-   	   var bkg = $('#bkg_canvas');
-	  if (bkg.length) {
-	  console.log('Background off');
-	  bkg.remove();
-	  }
-	  else {
-	  console.log('Background on');
-	  bkg = document.createElement('canvas');
-	  //$('<canvas id="bkg_canvas" height=100% width=100% style="position: fixed; top:0; left:0; z-index: 0;"></canvas>'); //for some reason using jquery to create the element doesn't work
-	  //$('.wrapper').prepend('<canvas id="bkg_canvas" data-processing-sources="test.pde" height=100% width=100% style="position: fixed; top:0; left:0; z-index: 0;"></canvas>');
-	  //bkg = $('#bkg_canvas');
-	  $(bkg).attr('id','bkg_canvas').css({height:'100%',width:'100%',position:'fixed',top:0,left:0,'z-index':0});
-	  console.log($(bkg));
-	  Processing.loadSketchFromSources(bkg, ['test.pde']); //new processing instance?
-	  $('.wrapper').prepend(bkg);
-	  }
+   	    var bkg = $('#bkg_canvas');
+	    if (bkg.length) {
+	      console.log('Background off');
+	      bkg.remove();
+	    }
+	    else {
+	    console.log('Background on');
+	    bkg = document.createElement('canvas');
+	    //$('<canvas id="bkg_canvas" height=100% width=100% style="position: fixed; top:0; left:0; z-index: 0;"></canvas>'); //for some reason using jquery to create the element doesn't work
+	    //$('.wrapper').prepend('<canvas id="bkg_canvas" data-processing-sources="test.pde" height=100% width=100% style="position: fixed; top:0; left:0; z-index: 0;"></canvas>');
+	    //bkg = $('#bkg_canvas');
+	    $(bkg).attr('id','bkg_canvas').css({height:'100%',width:'100%',position:'fixed',top:0,left:0,'z-index':0});
+	    console.log($(bkg));
+	    Processing.loadSketchFromSources(bkg, ['test.pde']); //new processing instance?
+	    $('.wrapper').prepend(bkg);
+	    }
 	  }
 	</script>
 </head>
@@ -67,14 +68,14 @@
 	<div id="text">
           <dl id="some">
             <dt id="projects" class="list">Some projects:</dt>
-              <dd><a href = "http://andrewlott.com/dvorak">DVORAK Keyboard Simulator</a></dd>
-              <dd><a href = "http://andrewlott.com/lastfm/lastfm.html">Last.fm Concert Aggregator</a></dd>
-              <dd><a href = "http://andrewlott.com/apollonian">Apollonian Gasket (experimental)</a></dd>
+              <a href = "http://andrewlott.com/dvorak">DVORAK Keyboard Simulator</a></br>
+              <a href = "http://andrewlott.com/lastfm/lastfm.html">Last.fm Concert Aggregator</a></br>
+              <a href = "http://andrewlott.com/apollonian">Apollonian Gasket (experimental)</a></br>
             <dt id="links" class="list">Some sites:</dt>
-              <dd><a href = "http://www.facebook.com/profile.php?id=1358310391">Facebook</a></dd>
-	      <dd><a href = "https://github.com/andrewlott">Github</ab></dd> 
-              <dd><a href = "https://plus.google.com/u/0/118295041737468659124">Google Plus</a></dd>
-              <dd><a href = "http://www.myspace.com/thegreatcaveoffensive">The Great Cave Offensive</a></dd>
+              <a href = "http://www.facebook.com/profile.php?id=1358310391">Facebook</a></br>
+	      <a href = "https://github.com/andrewlott">Github</ab></br>
+              <a href = "https://plus.google.com/u/0/118295041737468659124">Google Plus</a></br>
+              <a href = "http://www.myspace.com/thegreatcaveoffensive">The Great Cave Offensive</a></br>
 	    <dt id="badges" class="list">Some badges:</dt>
               <img src="img/badges.png">
           </dl>
