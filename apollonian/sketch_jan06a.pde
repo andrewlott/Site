@@ -149,8 +149,21 @@ public Circle innerSoddy(Circle a, Circle b, Circle c){
 
   float s = 0.5*(aa+bb+cc);
   
-  PVector cInner = new PVector(((aa+(area/(s-aa)))*a.center.x+(bb+(area/(s-bb)))*b.center.x+(cc+(area/(s-cc)))*c.center.x)/(aa+(area/(s-aa))+bb+(area/(s-bb))+cc+(area/(s-cc))),
+  float area_s_aa = area/(s-aa);
+  float area_s_bb = area/(s-bb);
+  float area_s_cc = area/(s-cc);
+  
+  float a_asa = aa+area_s_aa;
+  float b_asb = bb+area_s_bb;
+  float c_asc = cc+area_s_cc;
+  
+  float abc_div = a_asa+b_asb+c_asc;
+  
+  /*PVector cInner = new PVector(((aa+(area/(s-aa)))*a.center.x+(bb+(area/(s-bb)))*b.center.x+(cc+(area/(s-cc)))*c.center.x)/(aa+(area/(s-aa))+bb+(area/(s-bb))+cc+(area/(s-cc))),
                        ((aa+(area/(s-aa)))*a.center.y+(bb+(area/(s-bb)))*b.center.y+(cc+(area/(s-cc)))*c.center.y)/(aa+(area/(s-aa))+bb+(area/(s-bb))+cc+(area/(s-cc))));
+  */
+  PVector cInner = new PVector((a_asa*a.center.x+b_asb*b.center.x+c_asc*c.center.x)/(abc_div),
+                       (a_asa*a.center.y+b_asb*b.center.y+c_asc*c.center.y)/(abc_div));
   return new Circle(cInner,rInner);
   }
   //none if all tangential on same half of outer
@@ -158,14 +171,22 @@ public Circle innerSoddy(Circle a, Circle b, Circle c){
   Circle in1 = a.outer ? b : a;
   Circle in2 = ((a.outer && b == in1) || (b.outer && a == in1)) ? c : b;
   
-  float rInner = abs((-4*sqrt(pow(in1.radius,4)*pow(in2.radius,3)*pow(outer.radius,3)+
-                             pow(in1.radius,3)*pow(in2.radius,4)*pow(outer.radius,3)+
-                             pow(in1.radius,3)*pow(in2.radius,3)*pow(outer.radius,4))
+  float r13 = pow(in1.radius,3);
+  float r23 = pow(in2.radius,3);
+  float r33 = pow(outer.radius,3);
+  
+  float sq1 = sq(in1.radius);
+  float sq2 = sq(in2.radius);
+  float sq3 = sq(outer.radius);
+  
+  float rInner = abs((-4*sqrt(pow(in1.radius,4)*r23*r33+
+                             r13*pow(in2.radius,4)*r33+
+                             r13*r23*pow(outer.radius,4))
                      - in1.radius*in2.radius*outer.radius*(-2*in1.radius*in2.radius-2*in1.radius*outer.radius-2*in2.radius*outer.radius))
                      / (2*
-                       (sq(in1.radius)*sq(in2.radius)-2*sq(in1.radius)*in2.radius*outer.radius+
-                        sq(in1.radius)*sq(outer.radius)-2*in1.radius*sq(in2.radius)*outer.radius+
-                        sq(in2.radius)*sq(outer.radius)-2*in1.radius*in2.radius*sq(outer.radius))));
+                       (sq1*sq2-2*sq1*in2.radius*outer.radius+
+                        sq1*sq3-2*in1.radius*sq2*outer.radius+
+                        sq2*sq3-2*in1.radius*in2.radius*sq3)));
                         
   //println(rInner);
   float area = sqrt(in1.radius*in2.radius*rInner*(in1.radius+in2.radius+rInner));
@@ -174,9 +195,21 @@ public Circle innerSoddy(Circle a, Circle b, Circle c){
   float cc = in1.radius+in2.radius;
   float s = 0.5*(aa+bb+cc);
   
+  float area_s_aa = area/(s-aa);
+  float area_s_bb = area/(s-bb);
+  float area_s_cc = area/(s-cc);
+  
+  float a_asa = aa-area_s_aa;
+  float b_asb = bb-area_s_bb;
+  float c_asc = cc-area_s_cc;
+  
+  float abc_div = a_asa+b_asb+c_asc;
+  /*
   PVector cInner = new PVector( (outer.center.x*(aa-(area/(s-aa))+bb-(area/(s-bb))+cc-(area/(s-cc)))-(aa-(area/(s-aa)))*in1.center.x-(bb-(area/(s-bb)))*in2.center.x)/(cc-(area/(s-cc))),
                                 (outer.center.y*(aa-(area/(s-aa))+bb-(area/(s-bb))+cc-(area/(s-cc)))-(aa-(area/(s-aa)))*in1.center.y-(bb-(area/(s-bb)))*in2.center.y)/(cc-(area/(s-cc))));
-  
+  */
+  PVector cInner = new PVector( (outer.center.x*(abc_div)-a_asa*in1.center.x-b_asb*in2.center.x)/(c_asc),
+                                (outer.center.y*(abc_div)-a_asa*in1.center.y-b_asb*in2.center.y)/(c_asc));
   //cInner = new PVector(100,100);
   //println("OUTA");
   return new Circle(cInner,rInner);
@@ -249,6 +282,11 @@ public void draw() {
     point(((Circle)circ).center.x,((Circle)circ).center.y);
    } 
   }
+  if(((float)count)/((float)rate) > 6) {
+    noLoop();
+    paused = !paused;
+  }
+  
 }
 
 public boolean noneEqual(int i, int j, int k) {
