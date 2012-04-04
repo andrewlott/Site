@@ -1,8 +1,8 @@
-/**
- *
- *For Angjoo
- *
- */
+//given 3 circles, return the center and radius of the next circle. add this circle to list
+
+//find 3 tangent circles
+//do the rest
+
 
 Circle edge;
 ArrayList circles;
@@ -11,6 +11,7 @@ int depth;
 boolean textOn;
 boolean paused;
 int rate;
+int lim;
 
 PFont font;
 
@@ -21,8 +22,9 @@ public void setup() {
   textOn = false;
   paused = false;
   font = loadFont("MonotypeGurmukhi-255.vlw");
-  rate = 250;
+  rate = 1;
   count = 1;
+  lim = 6;
   /*
   float r = 0;
   float rad = 0;
@@ -120,6 +122,7 @@ public void mouseClicked(){
     Circle a = (Circle)circles.get(0);
     Circle b = (Circle)circles.get(1);
     Circle c = (Circle)circles.get(2);
+    //use this!?
     a.radius = 0.5*(-dist(c.center.x,c.center.y,b.center.x,b.center.y)+dist(c.center.x,c.center.y,a.center.x,a.center.y)+dist(b.center.x,b.center.y,a.center.x,a.center.y));
     b.radius = 0.5*(dist(c.center.x,c.center.y,b.center.x,b.center.y)-dist(c.center.x,c.center.y,a.center.x,a.center.y)+dist(b.center.x,b.center.y,a.center.x,a.center.y));
     c.radius = 0.5*(dist(c.center.x,c.center.y,b.center.x,b.center.y)+dist(c.center.x,c.center.y,a.center.x,a.center.y)-dist(b.center.x,b.center.y,a.center.x,a.center.y)); 
@@ -204,8 +207,8 @@ public Circle innerSoddy(Circle a, Circle b, Circle c){
   float c_asc = cc-area_s_cc;
   
   float abc_div = a_asa+b_asb+c_asc;
-  /*
-  PVector cInner = new PVector( (outer.center.x*(aa-(area/(s-aa))+bb-(area/(s-bb))+cc-(area/(s-cc)))-(aa-(area/(s-aa)))*in1.center.x-(bb-(area/(s-bb)))*in2.center.x)/(cc-(area/(s-cc))),
+  
+  /*PVector cInner = new PVector( (outer.center.x*(aa-(area/(s-aa))+bb-(area/(s-bb))+cc-(area/(s-cc)))-(aa-(area/(s-aa)))*in1.center.x-(bb-(area/(s-bb)))*in2.center.x)/(cc-(area/(s-cc))),
                                 (outer.center.y*(aa-(area/(s-aa))+bb-(area/(s-bb))+cc-(area/(s-cc)))-(aa-(area/(s-aa)))*in1.center.y-(bb-(area/(s-bb)))*in2.center.y)/(cc-(area/(s-cc))));
   */
   PVector cInner = new PVector( (outer.center.x*(abc_div)-a_asa*in1.center.x-b_asb*in2.center.x)/(c_asc),
@@ -236,9 +239,9 @@ public void draw() {
   if(circles.size() >= 4.0){
   textFont(font);
   textAlign(LEFT,TOP);
-  text(1+count/rate,0,0);
+  //text(1+count/rate,0,0);
   //println(count);
-  if(count%rate == 0) {
+  if(count%rate == 0 && count/rate < lim-1) {
     //println("WOO");
     int s = circles.size();
     for(int i = 0; i < s; i++) {
@@ -252,8 +255,8 @@ public void draw() {
             n.parents[2] = k;
             if(!n.used()) {
               circles.add(n);  
-
-              ((Circle)circles.get(circles.size()-1)).id = circles.size()-1;
+              //circles.add(outerSoddy((Circle)circles.get(i),(Circle)circles.get(j),(Circle)circles.get(k)));
+              //((Circle)circles.get(circles.size()-1)).id = circles.size()-1;
               //println(i+" "+j+" "+k);
             }/*
             else{
@@ -266,9 +269,9 @@ public void draw() {
       }
     }
   }
-  if(!paused) {
-  //println(count++%rate);
-  count++;
+  if(!paused && count/rate < lim-1) {
+   //println(count++%rate);
+    count++;
   }
   translate(width/2-((Circle)circles.get(3)).center.x,height/2-((Circle)circles.get(3)).center.y);
   for(int i = 0; i < circles.size(); i++) {
@@ -279,14 +282,10 @@ public void draw() {
   else{
 
    for(Object circ : circles) {
-    point(((Circle)circ).center.x,((Circle)circ).center.y);
+    fill(0);
+    ellipse(((Circle)circ).center.x,((Circle)circ).center.y,3,3);
    } 
   }
-  if(((float)count)/((float)rate) > 6) {
-    noLoop();
-    paused = !paused;
-  }
-  
 }
 
 public boolean noneEqual(int i, int j, int k) {
@@ -342,7 +341,7 @@ public class Circle{
  }
  
  public boolean used(){
-   if(count/250 < 2){return false;}
+   if(count/rate < 2){return false;}
    int num = 0;
    for(Object cir : circles) {
     Circle c = (Circle) cir;
