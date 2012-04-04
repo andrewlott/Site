@@ -29,23 +29,32 @@
 	    $("#b").animate({color:colors[j++%colors.length]},100);
 	    $("#c").animate({color:colors[i++%colors.length]},100,setColor);
 	  }
+          
+	  $(document).ready(function() {
+	    if(localStorage['bkg'] == false) {
+	      console.log(localStorage['bkg']);
+	      toggleBkg();
+            }
+	  });
 
 	  function toggleBkg() {
    	    var bkg = $('#bkg_canvas');
 	    if (bkg.length) {
 	      console.log('Background off');
 	      bkg.remove();
+	      localStorage['bkg'] = false;
 	    }
 	    else {
-	    console.log('Background on');
-	    bkg = document.createElement('canvas');
-	    //$('<canvas id="bkg_canvas" height=100% width=100% style="position: fixed; top:0; left:0; z-index: 0;"></canvas>'); //for some reason using jquery to create the element doesn't work
-	    //$('.wrapper').prepend('<canvas id="bkg_canvas" data-processing-sources="test.pde" height=100% width=100% style="position: fixed; top:0; left:0; z-index: 0;"></canvas>');
-	    //bkg = $('#bkg_canvas');
-	    $(bkg).attr('id','bkg_canvas').css({height:'100%',width:'100%',position:'fixed',top:0,left:0,'z-index':0});
-	    console.log($(bkg));
-	    Processing.loadSketchFromSources(bkg, ['test.pde']); //new processing instance?
-	    $('.wrapper').prepend(bkg);
+	      console.log('Background on');
+	      bkg = document.createElement('canvas');
+	      //$('<canvas id="bkg_canvas" height=100% width=100% style="position: fixed; top:0; left:0; z-index: 0;"></canvas>'); //for some reason using jquery to create the element doesn't work
+	      //$('.wrapper').prepend('<canvas id="bkg_canvas" data-processing-sources="test.pde" height=100% width=100% style="position: fixed; top:0; left:0; z-index: 0;"></canvas>');
+	      //bkg = $('#bkg_canvas');
+	      $(bkg).attr('id','bkg_canvas').css({height:'100%',width:'100%',position:'fixed',top:0,left:0,'z-index':0});
+	      console.log($(bkg));
+	      Processing.loadSketchFromSources(bkg, ['test.pde']); //new processing instance?
+	      $('.wrapper').prepend(bkg);
+	      localStorage['bkg'] = true;
 	    }
 	  }
 	</script>
@@ -70,7 +79,7 @@
             <dt id="projects" class="list">Some projects:</dt>
               <a href = "http://andrewlott.com/dvorak">DVORAK Keyboard Simulator</a></br>
               <a href = "http://andrewlott.com/lastfm/lastfm.html">Last.fm Concert Aggregator</a></br>
-              <a href = "http://andrewlott.com/apollonian">Apollonian Gasket (experimental)</a></br>
+              <a href = "http://andrewlott.com/apollonian">Apollonian Gasket Applet</a></br>
             <dt id="links" class="list">Some sites:</dt>
               <a href = "http://www.facebook.com/profile.php?id=1358310391">Facebook</a></br>
 	      <a href = "https://github.com/andrewlott">Github</ab></br>
