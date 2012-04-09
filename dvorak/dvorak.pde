@@ -1,22 +1,3 @@
-import processing.core.*; 
-import processing.xml.*; 
-
-import java.applet.*; 
-import java.awt.Dimension; 
-import java.awt.Frame; 
-import java.awt.event.MouseEvent; 
-import java.awt.event.KeyEvent; 
-import java.awt.event.FocusEvent; 
-import java.awt.Image; 
-import java.io.*; 
-import java.net.*; 
-import java.text.*; 
-import java.util.*; 
-import java.util.zip.*; 
-import java.util.regex.*; 
-
-public class dvorak extends PApplet {
-
 /*
 Written by Andrew Lott in the winter of 2009/2010
  Last updated: winter 2010/2011
@@ -32,7 +13,7 @@ PImage img;
 int image_x = 70;
 int image_y = 480-35-167;
 
-public void setup() {
+void setup() {
   size(640,480);
   hashify();
   font = loadFont("Courier-24.vlw");
@@ -41,7 +22,7 @@ public void setup() {
   noStroke();
 }
 
-public void hashify() {
+void hashify() {
   converter.put('q', "\'"); 
   converter.put('w', ",");
   converter.put('e', ".");
@@ -119,7 +100,7 @@ public void hashify() {
 
 float text_y = 30;
 
-public void draw() {
+void draw() {
   background(255);
   //textFont(createFont("CourierNew",24));
   fill(0,0,0);
@@ -132,7 +113,7 @@ public void draw() {
 
 int enters = 0;
 
-public void keyPressed() {
+void keyPressed() {
   if(key != CODED) {
     if(key == '\n')
       enters++;
@@ -152,12 +133,12 @@ public void keyPressed() {
     toDVORAK();
 }
 
-public void toDVORAK(){
+void toDVORAK(){
   println(converter.containsKey(key));
   if (converter.containsKey(key))
     s += converter.get(key);
   else if (key < 128)
-    s += PApplet.parseChar(key);
+    s += char(key);
   /*
   if(key == 'q')
    s+="\'";
@@ -316,7 +297,7 @@ public void toDVORAK(){
 }
 
 //coloring problem is due to incorrect adding of image_x and x
-public void highlight(char k) {
+void highlight(char k) {
   float key1 = 33.25f;
   float delt = 2*key1;
   float tab = 1.5f*key1;
@@ -563,7 +544,3 @@ public void highlight(char k) {
 
 
 
-  static public void main(String args[]) {
-    PApplet.main(new String[] { "--bgcolor=#FFFFFF", "dvorak" });
-  }
-}
