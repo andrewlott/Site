@@ -1,0 +1,3 @@
+
+dvorak
+dvorak.jar,core.jar
