@@ -13,24 +13,52 @@
     </script>
     <script type="text/javascript">
       function initialize() {
+        var colors = {'A':'2850AD','C':'2850AD','E':'2850AD',
+                  'B':'FF6319','D':'FF6319','F':'FF6319','M':'FF6319',
+                  'G':'6CBE45',
+                  'J':'996633','Z':'996633',
+                  'L':'A7A9AC',
+                  'N':'FCCC0A','Q':'FCCC0A','R':'FCCC0A',
+                  'S':'808183',
+                  '1':'EE352E','2':'EE352E','3':'EE352E',
+                  '4':'00933C','5':'00933C','6':'00933C',
+                  '7':'B933AD'
+      }
         var myOptions = {
           center: new google.maps.LatLng(40.714,-74.006),
-          zoom: 14,
+          zoom: 13,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        var map = new google.maps.Map(document.getElementById("map_canvas"),
+        map = new google.maps.Map(document.getElementById("map_canvas"),
             myOptions);
       var coordinates = [];
-      $.getJSON('routes.json',function(data){coordinates = data;});
-      console.log(coordinates);
-      var NQRcoordinates = [];
+      $.getJSON('routes.json',
+        function(data){
+      coordinates = data;
+      
+      for (var s in coordinates) {
+       var c = colors[s.charAt(0)];
+       addPath(coordinates[s], c ? c : '#553311');
+      }
 
-       var NQRpath = new google.maps.Polyline({
-      path: NQRcoordinates,
-      strokeColor: "#FCCC0A",
-      strokeOpacity: 1.0,
-      strokeWeight: 2
-  });
+      });
+
+
+
+      }
+      function addPath(lls, color) {
+      var coordinates = [];
+      for (var c in lls){
+       coordinates.push(new google.maps.LatLng(lls[c][0],lls[c][1]));
+      }
+       var path = new google.maps.Polyline({
+      path: coordinates,
+      strokeColor: color,
+      strokeOpacity: .5,
+      strokeWeight: 5
+      });
+      
+      path.setMap(map);
       }
     </script>
   </head>
