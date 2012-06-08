@@ -2,8 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang=en>
 <head>
   <script src="../js/processing-1.3.6.min.js"></script>
+  <script>
+    function preventBackspaceHandler(evt) {
+      evt = evt || window.event;
+      if (evt.keyCode == 8) {
+        return false;
+      }
+    }
+  </script>
 </head>
 <body>
-<canvas data-processing-sources="dvorak.pde"></canvas>
+<canvas data-processing-sources="dvorak.pde" tabindex="1" onkeydown="return preventBackspaceHandler(e)"></canvas>
 </body>
 </html>

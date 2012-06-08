@@ -7,7 +7,7 @@ Written by Andrew Lott in the winter of 2009/2010
 HashMap converter = new HashMap();
 String s = "";
 PFont font;
-/* @pjs preload="500px-KB_United_States_Dvorak.png"; */
+/* @pjs preload="img/500px-KB_United_States_Dvorak.png"; */
 /* @pjs font="CourierNew.ttf"; */
 PImage img;
 int image_x = 70;
@@ -16,9 +16,10 @@ int image_y = 480-35-167;
 void setup() {
   size(640,480);
   hashify();
-  font = loadFont("Courier-24.vlw");
-  textFont(font);
-  img = loadImage("500px-KB_United_States_Dvorak.png");
+  //font = loadFont("Courier-24.vlw");
+  //textFont(font);
+  textFont(createFont("CourierNew",24));
+  img = loadImage("img/500px-KB_United_States_Dvorak.png");
   noStroke();
 }
 
@@ -102,7 +103,6 @@ float text_y = 30;
 
 void draw() {
   background(255);
-  //textFont(createFont("CourierNew",24));
   fill(0,0,0);
   text(s,10,text_y,620,500);
   image(img, image_x, image_y);
@@ -134,7 +134,6 @@ void keyPressed() {
 }
 
 void toDVORAK(){
-  println(converter.containsKey(key));
   if (converter.containsKey(key))
     s += converter.get(key);
   else if (key < 128)

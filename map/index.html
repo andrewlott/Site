@@ -38,7 +38,7 @@
       
       for (var s in coordinates) {
        var c = colors[s.charAt(0)];
-       addPath(coordinates[s], c ? c : '#553311');
+       addPath(coordinates[s], c ? c : '#553311', s.charAt(0));
       }
 
       });
@@ -46,7 +46,7 @@
 
 
       }
-      function addPath(lls, color) {
+      function addPath(lls, color, name) {
       var coordinates = [];
       for (var c in lls){
        coordinates.push(new google.maps.LatLng(lls[c][0],lls[c][1]));
@@ -58,6 +58,11 @@
       strokeWeight: 5
       });
       
+      path.w = new google.maps.InfoWindow( {content:name});
+      google.maps.event.addListener(path,'click', function(event){
+         path.w.setPosition(event.latLng);
+         path.w.open(map);
+      });
       path.setMap(map);
       }
     </script>
