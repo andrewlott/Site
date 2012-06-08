@@ -2,7 +2,7 @@
   -ip city / multiple city storage
   -change location / merge with choose location
   -investigate if lastfm recommended events includes this entire set. if so, filter by top artists still. if it doesn't then add loading gif
-     --needs authentication
+     --needs authentication, so don't do it
  */
 
 //lastfm.user.getRecommendedEvents({user:'blood and iron'},{success:function(data){console.log(data);}},{error:function(e){console.log("Error: "+e);}});
@@ -20,6 +20,7 @@ lastfm = new LastFM({
 	apiSecret : 'aa9bcd5864cf910acff3aa7bc2bc25f9'//,
 	//	cache     : cache
 });
+/* Huge hash of countries/codes, gotta do something with this haha */
 COUNTRY = {
 	"AF":"AFGHANISTAN",
 	"AX":"ALAND ISLANDS",
@@ -268,21 +269,22 @@ COUNTRY = {
 	"ZM":"ZAMBIA",
 	"ZW ":"ZIMBABWE"
 };
+
 locations = []; //locations user wants to use
-chooseL = false; //currently adding location or not
-metros = []; //all available metros (in country)
+chooseL = false; //Boolean: currently adding location or not
+metros = []; //all available metros (in country), for top bar
 countryCode = ''; //country code for access IP
 artists = []; //selected artists
 allArtists = {}; //all artists
 periods = ["overall","7day","3month","6month","12month"]; //available time periods
-selectedPeriods = []; //the current time periods
+selectedPeriods = []; //the selected time periods
 //events = ??
-artistLim = 50;
+artistLim = 50; //self-explanatory
 clearLocalStorage = false; //debugging
 
-//DOCUMENT READY
+/* DOCUMENT READY i.e. Main */
 $(document).ready(function() {	
-
+    
 	countryCode = geoip_country_code();
 
 	//setup page properties
@@ -322,6 +324,8 @@ $(document).ready(function() {
 	    localStorage.removeItem('metros');
 	    localStorage.removeItem('periods');
 	}
+
+        /* Set defaults for localStorage */
 
 	if(!localStorage["locations"]){
 	    localStorage["locations"] = JSON.stringify([geoip_region_name()]);
@@ -458,6 +462,7 @@ function addLocation(s) {
     //$('#topbar').animate({height:"25px"},500,function(){$('#choices').remove();});
     //chooseL = false;
 }
+
 function removeLocation(e) {
     var n = $(e).attr('name');
     locations.splice(locations.indexOf(n),1);
@@ -482,6 +487,13 @@ function togglePeriod(p) {
     }
     localStorage['periods'] = JSON.stringify(selectedPeriods);
 }
+/**
+
+NOW ENTERING THE LAND OF DEPRECATION
+
+**/
+
+
 /*
 all_artists = {};
 */
