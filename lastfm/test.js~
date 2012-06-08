@@ -2,38 +2,24 @@
   -ip city / multiple city storage
   -change location / merge with choose location
   -investigate if lastfm recommended events includes this entire set. if so, filter by top artists still. if it doesn't then add loading gif
+     --needs authentication
  */
 
-$(document).ready(function() {	
+//lastfm.user.getRecommendedEvents({user:'blood and iron'},{success:function(data){console.log(data);}},{error:function(e){console.log("Error: "+e);}});
 
+/*********/
+/*GLOBALS*/
+/*********/
 
-   if($.browser.mozilla){
-   	$("#first").prepend("Username: ");
-   	$("#second").prepend("Artist: ");
-   }
+/* Create a cache object */
+//cache = new LastFMCache();
 
-   if(document.URL.indexOf("?") != -1) {
-
-   	 strs = document.URL.split('?')[1].split('&');
-   	 inf = {};
-   	 for(s in strs){
-   	 	var temp = strs[s].split('=');
-   	 	inf[temp[0]] = temp[1];
-   	 }
-
-   	 u_name = inf['username'].replace(/%20/g," ");
-   	 met = inf['city'].replace(/%20/g," ");
-   	 $(".main").attr("readonly","readonly");
-	 $(".main").attr("onKeyPress","return false");
-
-	 if(localStorage.getItem('city')) 
-	     $("body").prepend("<a href = \"javascript:change_loc()\" style=\"font-size:13px;float:right\" id=\"ch_loc\"><small> Change location </small></a>");
-
-	 run();
-   }
-
- });
-all_artists = {};
+/* Create a LastFM object */
+lastfm = new LastFM({
+	apiKey    : 'a82fb638014679c4de2bc043e89aee83',
+	apiSecret : 'aa9bcd5864cf910acff3aa7bc2bc25f9'//,
+	//	cache     : cache
+});
 COUNTRY = {
 	"AF":"AFGHANISTAN",
 	"AX":"ALAND ISLANDS",
@@ -282,16 +268,208 @@ COUNTRY = {
 	"ZM":"ZAMBIA",
 	"ZW ":"ZIMBABWE"
 };
-    	/* Create a cache object */
-cache = new LastFMCache();
+locations = []; //locations user wants to use
+chooseL = false; //currently adding location or not
+metros = []; //all available metros (in country)
+countryCode = ''; //country code for access IP
+artists = []; //selected artists
+allArtists = {}; //all artists
+periods = ["overall","7day","3month","6month","12month"]; //available time periods
+selectedPeriods = []; //the current time periods
+//events = ??
+artistLim = 50;
+clearLocalStorage = false; //debugging
 
-/* Create a LastFM object */
-lastfm = new LastFM({
-	apiKey    : 'a82fb638014679c4de2bc043e89aee83',
-	apiSecret : 'aa9bcd5864cf910acff3aa7bc2bc25f9',
-	cache     : cache
-});
+//DOCUMENT READY
+$(document).ready(function() {	
 
+	countryCode = geoip_country_code();
+
+	//setup page properties
+	$('div#periods').mouseenter(function(){$(this).animate({'color':'#777777'},'fast',function(){});}); 
+	$('div#periods').mouseleave(function(){$(this).animate({'color':'#444444'},'fast',function(){});}); 
+
+	//URL PARAMETERS
+	if(document.URL.indexOf("?") != -1) {
+	    
+	    strs = document.URL.split('?')[1].split('&');
+	    inf = {};
+	    for(s in strs){
+   	 	var temp = strs[s].split('=');
+   	 	inf[temp[0]] = temp[1];
+	    }
+	    
+	    u_name = inf['username'].replace(/%20/g," ");
+	    //met = inf['city'].replace(/%20/g," ");
+	    //$(".main").attr("readonly","readonly");
+	    //$(".main").attr("onKeyPress","return false");
+	    /*
+	      if(localStorage.getItem('city')) 
+	      $("body").prepend("<a href = \"javascript:change_loc()\" style=\"font-size:13px;float:right\" id=\"ch_loc\"><small> Change location </small></a>");
+	    */
+	    //run();
+	}
+
+	//CLEAR LOCAL STORAGE
+	if(clearLocalStorage){
+	    console.log("CLEARING LOCAL STORAGE");
+	    localStorage.removeItem('city');
+	    localStorage.removeItem('country');
+	    localStorage.removeItem('length');
+	    localStorage.removeItem('lastfm');
+	    localStorage.removeItem('locations');
+	    localStorage.removeItem('userName');
+	    localStorage.removeItem('metros');
+	    localStorage.removeItem('periods');
+	}
+
+	if(!localStorage["locations"]){
+	    localStorage["locations"] = JSON.stringify([geoip_region_name()]);
+	}
+	if(!localStorage['metros']) {
+	    lastfm.geo.getMetros({country: countryCode},{success: 
+		    function(data){
+			//Manually look for country FIX
+
+			for(var key in data['metros']['metro']) {
+			    if(COUNTRY[countryCode] == data['metros']['metro'][key]['country'].toUpperCase()){
+				metros.push(data['metros']['metro'][key]['name'].trim());
+			    }
+			}
+			metros.sort();
+			for(var i in metros) {
+			    $('#choices').append('<div id="'+metros[i]+'" onClick="addLocation(\''+metros[i]+'\');" style="float:left; padding-left: 2px; padding-right: 2px; font-size:8px;">'+metros[i]+'</div>');
+			}
+			localStorage['metros'] = JSON.stringify(metros);
+		    }
+		},{error: function(e){console.log("Error: "+e);}});    
+
+	}
+	else{
+	    metros = JSON.parse(localStorage['metros']);
+	}
+
+	//SET GLOBAL LOCATIONS
+	locations = JSON.parse(localStorage["locations"]); //use default || hackery
+	selectedPeriods = localStorage['periods'] ? JSON.parse(localStorage['periods']) :  ['overall'];
+
+	locations.sort();
+	for(var i in locations) {
+	    $('#locations').append('<div name="'+locations[i]+'" id="city'+i+'" class="metro" onClick="removeLocation(this);" style="float:left;padding-left:5px; padding-right:5px; cursor:pointer;">'+locations[i]+'</div><div class = "sep" style="float:left;padding-left:0px;padding-right:0px;cursor:default;">|</div>');
+	}
+	for(var i in selectedPeriods) {
+	    $('div#'+selectedPeriods[i]).css('color','#333333');
+	}
+	/*   
+	     if(localStorage["userName"] || u_name){
+	     
+	     if(u_name) {
+	     localStorage["userName"] = u_name;
+	     }
+	     userName = localStorage["userName"];
+	     
+	     if(userName) {
+	     $('userName').append(userName);
+	     }
+	     
+	     }
+	*/
+	//u_name = "blood and iron";
+	//run();
+	//var a = getAllTopArtists();
+    });
+
+
+function chooseLocation(e) {
+    chooseL = !chooseL;
+    var speed = 125;
+    if(chooseL) {
+	var fontsize = 11;
+	var count = 0;
+				 				 
+	for (var i in metros) {
+	    count+= (metros[i].length+4)*fontsize;
+	}
+	//make divs, attach (display:none)
+	//slidedown to open
+	$('#topbar').animate({height:(count"px"},speed,
+			     function(){
+				 $('#topbar').one('mouseleave',
+						  function(){
+						      if(chooseL) { 
+							  chooseL = !chooseL; 
+							  $('#topbar').animate({height:"25px"},speed,function(){$('#choices').remove();});
+						      }
+						  });
+
+				 $(this).append('<div id="choices" style="width:100%; bottom:0px; position:relative; text-align:center;"></div>');
+				 if(metros.length != 0){    
+				     for(var i in metros) {
+					 $('#choices').append('<div id="'+metros[i]+'" onClick="addLocation(\''+metros[i]+'\');" style="float:left; padding-left: 2px; padding-right: 2px; font-size:'+fontsize+'px;cursor:pointer;">'+metros[i]+'</div><div class = "sep" style="float:left;padding-left:0px;padding-right:0px;font-size:'+fontsize+'px;cursor:default;">|</div>');
+				     }
+				     $('#choices').children().last().remove();
+				 }
+			     });
+    }
+    else{
+	$('#topbar').animate({height:"25px"},speed,function(){$('#choices').remove();});
+    }
+}
+
+function addLocation(s) {
+    if($.inArray(s,locations) == -1) {
+	//fix this all. not pushing in right order and stuff
+	locations.push(s);
+	localStorage["locations"] = JSON.stringify(locations);
+	var locs = $('#locations').children(':not(.sep)');
+	var i = 0;
+	var temp = locs[0];
+
+	while(metros.indexOf($(temp).text()) < metros.indexOf(s) && i < locs.length) {
+	    //alert(temp.innerText+ ': '+$.inArray(temp.innerText,metros));
+	    temp = locs[++i];
+	}
+	
+	if(i < locs.length) {
+	    $('div[name="'+$(temp).text()+'"]').before('<div name="'+s+'" id="city'+(locations.length-1)+'" onClick="removeLocation(this);" style="float:left;padding-left:5px;padding-right:5px;cursor:pointer;">'+s+'</div><div class = "sep" style="float:left;padding-left:0px;padding-right:0px;cursor:default">|</div>');
+	}
+	else{
+	    $('#locations').append('<div name="'+s+'" id="city'+(locations.length-1)+'" onClick="removeLocation(this);" style="float:left;padding-left:5px;padding-right:5px;cursor:pointer;">'+s+'</div><div class = "sep" style="float:left;padding-left:0px;padding-right:0px;cursor:default;">|</div>');
+	}
+    }
+    //$('#topbar').animate({height:"25px"},500,function(){$('#choices').remove();});
+    //chooseL = false;
+}
+function removeLocation(e) {
+    var n = $(e).attr('name');
+    locations.splice(locations.indexOf(n),1);
+    //console.log(locations);
+    localStorage["locations"] = JSON.stringify(locations);
+    $('#'+e.id).next().remove();
+    $('#'+e.id).remove();
+}
+
+function togglePeriod(p) {
+    var label = $(p).text().split(' ').join('').replace('s',''); //removes s from text
+    var i = $.inArray(label,selectedPeriods);
+    if(i < 0){ //not in the array
+	//use css classes for this:
+	$(p).animate({'color':'#333333'},'fast');
+	selectedPeriods.push(label);
+    }else {
+	//using color:inherit results in: Uncaught TypeError: Cannot read property '0' of undefined (jquery-ui.min.js:171)
+	//$(p).animate({'color':'#777777'},'fast'); //problem with jquery ui animation
+	$(p).css('color','inherit');
+	selectedPeriods.splice(i,1);
+    }
+    localStorage['periods'] = JSON.stringify(selectedPeriods);
+}
+/*
+all_artists = {};
+*/
+
+
+/*
 function change_loc() {
 	loc = [];
 	$("#ch_loc").after("<br/><br/><div id=\"loc\" style=\"float:right;border-radius:20px;width:20%\"> </div><br/>");
@@ -311,7 +489,8 @@ function change_loc() {
 	}, error: function(code,message){}});
 	return true;
 }
-
+*/
+/*
 function clickCountry(form){
 	  for(var i = 0; i < loc.length; i++) {
 	  	if(loc[i] != form.name)
@@ -344,40 +523,23 @@ function clickCountry(form){
 
 	  return true;
 }
+*/
 
 function getAllTopArtists(){
-	var periods = ["overall","7day","3month","6month","12month"];
-	
-	//arr = [];
-	
 	var artists = {};
-	for(var per in periods) {
-		lastfm.user.getTopArtists({user: u_name, period: periods[per]}, {success: function(data){
-		//	var table = prettyPrint( data, { /*optional options object */ } );
-		//	document.body.appendChild(table);
+	for(var per in selectedPeriods) {
+	    lastfm.user.getTopArtists({user: u_name, period: selectedPeriods[per], limit: artistLim}, {success: function(data){
 			for( var art in data.topartists.artist){
-		//		if( arr.indexOf([data.topartists.artist[art].name, data.topartists.artist[art].mbid]) == -1 )
-					//alert(data.topartists.artist[art].name);
-					artists[data.topartists.artist[art].name] = data.topartists.artist[art].mbid;
+			    artists[data.topartists.artist[art].name] = data.topartists.artist[art].mbid;
 			}
-		//	alert(arr.length);
-		//data.topartists.artist.forEach(arr.push);
-		}, error: function(code, message){}});
+			
+			}, error: function(code, message){}});
 	}
-//	var all = 0;
-//	arr.sort(function fun(a,b){return 1});
-	//arr = arr.sort(function(a,b) { if(a[0].toLowerCase() < b[0].toLowerCase()) return -1; else if(a[0].toLowerCase() > b[0].toLowerCase())  return 1; else return 0;});
-/*	while(all < arr.length){
-		while(all+1 < arr.length && arr[all+1][0] == arr[all][0] && arr[all+1][1] == arr[all][1])
-			arr.splice(all,all+1);
-		all++;
-	}*/
-	//alert("fdafdsaf" + arr.length);
-//	return arr;
 	return artists;
 }
-function getLocalEvents(mbid, name){
-//	alert(name);
+
+//Decprecated?
+function getLocalEvents(mbid, name, met){
 	art_ev = {};
 	var counter = 0;
 	lastfm.artist.getEvents({artist: name, mbid: mbid}, {success: function(data){
@@ -544,6 +706,15 @@ function display_event(artist){
 	artist.displayed = true;
 }
 
+function isLocationSelected(loc) {
+    for(var index in locations) {
+	if(loc.indexOf(locations[index].toLowerCase()) >= 0) {
+	    return true;
+	}
+    }
+    return false;
+}
+
 function run(){
 	
 	//alert(all_artists.length);
@@ -553,46 +724,51 @@ function run(){
 //		document.body.appendChild(table);	
 //	}
 //	return;
-	var periods = ["overall","12month","6month","3month","7day"];
+//	var periods = ["overall","12month","6month","3month","7day"];
 //	all_artists["test"] = {};
 //	all_artists["test"].mbid = 123423;
 //	all_artists["test"].events = [{}, "a", 3];
-	for(var per in periods) {
-		lastfm.user.getTopArtists({user: u_name, period: periods[per], limit: 100}, {success: function(a){
+	artists = {};
+	for(var per in selectedPeriods) {
+		lastfm.user.getTopArtists({user: u_name, period: selectedPeriods[per], limit: 100}, {success: function(a){
+			    console.log(a.topartists.artist);
 			for(var art in a.topartists.artist) {
-				if(!(all_artists[a.topartists.artist[art].name])) {
-					all_artists[a.topartists.artist[art].name] = {};
-					all_artists[a.topartists.artist[art].name].name = a.topartists.artist[art].name;
-					all_artists[a.topartists.artist[art].name].mbid = a.topartists.artist[art].mbid;
-					all_artists[a.topartists.artist[art].name].events = [];
-					all_artists[a.topartists.artist[art].name].displayed = false;
-					all_artists[a.topartists.artist[art].name].image = a.topartists.artist[art].image[3]["#text"];
-					lastfm.artist.getEvents({artist: a.topartists.artist[art].name, mbid: all_artists[a.topartists.artist[art].name].mbid}, {success: function(e){
+				if(!(artists[a.topartists.artist[art].name])) {
+					artists[a.topartists.artist[art].name] = {};
+					artists[a.topartists.artist[art].name].name = a.topartists.artist[art].name;
+					artists[a.topartists.artist[art].name].mbid = a.topartists.artist[art].mbid;
+					artists[a.topartists.artist[art].name].events = [];
+					artists[a.topartists.artist[art].name].displayed = false;
+					artists[a.topartists.artist[art].name].image = a.topartists.artist[art].image[3]["#text"];
+					
+					lastfm.artist.getEvents({artist: a.topartists.artist[art].name || '', mbid: a.topartists.artist[art].mbid || ''}, {success: function(e){
 //						if(e.events != null) {
 						if(e.events["@attr"])
 							var namae = e.events["@attr"].artist;
 						else							
 							var namae = e.events.artist;
-							for(var evs in e.events.event) {
-								if(e.events.event[evs].venue && e.events.event[evs].venue.location.city.toLowerCase().indexOf(met.toLowerCase()) != -1) {
-									all_artists[namae].events.push(e.events.event[evs]);
-								}
-							}
-
-							if(all_artists[namae].events[0])
-								display_event(all_artists[namae]);
+						for(var evs in e.events.event) {
+						    if(e.events.event[evs].venue && isLocationSelected(e.events.event[evs].venue.location.city.toLowerCase())) {
+							artists[namae].events.push(e.events.event[evs]);
+						    }
+						}
+						
+						if(artists[namae].events[0])
+						    display_event(artists[namae]);
+							
 //						}
-					}, error: function(code, message){alert("Error in Events: " + message);}});
+
+						}, error: function(code, message){alert("Error in Events: " + message);}});
 				}
 			}
 		}, error: function(code, message){alert("Error in Top Artists: " + message);}});
 	}
-/*	for(var arts in all_artists){
-		lastfm.artist.getEvents({artist: arts, mbid: all_artists[arts].mbid}, {success: function(e){
+/*	for(var arts in artists){
+		lastfm.artist.getEvents({artist: arts, mbid: artists[arts].mbid}, {success: function(e){
 			if(e.events != null) {
 				for(var evs in e.events.event) {
 					if(e.events.event[evs].venue.location.city.toLowerCase().indexOf(met.toLowerCase()) != -1) {
-						//all_artists[e.events["@attr"].artist].events.push(e.events.event[evs]);
+						//artists[e.events["@attr"].artist].events.push(e.events.event[evs]);
 					}
 				}
 			}
@@ -663,46 +839,48 @@ if (keycode == 13 && myfield.value != ""){
 	  }, 1500);
 	  al(myfield);
 	}
-	else if(myfield.id == "username"){
+	else if(myfield.id == "username" && periods.length && locations.length){
 		u_name = myfield.value;
 		//all_artists = getAllTopArtists();
 		//all_artists = getAllTopArtists().sort(function names(a,b) { if(a[0].toLowerCase() < b[0].toLowerCase()) return -1; else if(a[0].toLowerCase() > b[0].toLowerCase())  return 1; else return 0;});
 		$(".main").attr("readonly","readonly");
-		$(".main").attr("onKeyPress","return false");
-	  lastfm.user.getInfo({user : u_name},{success:function(data){ 
-	  $("#body").append("<p id = \"city_message\"> <br/>Choose from the following metropolitan areas: <br/> </p>");
-	  $("#city_message").animate({
-	  	opacity: "0"
-	  }, 0, function(){
-	  	$(this).animate({
-	  opacity: "255"
-	  }, 2000);
-	  });
-	  count = COUNTRY[data.user.country]; 
+		$(".main").attr("onKeyPress","return false;");
+		
+		//	  lastfm.user.getInfo({user : u_name},{success:function(data){ 
+		//$("#body").append("<p id = \"city_message\"> <br/>Choose from the following metropolitan areas: <br/> </p>");
+		//$("#city_message").animate({
+	  	//opacity: "0"
+		//  }, 0, function(){
+	  	//$(this).animate({
+		//opacity: "255"
+		//}, 2000);
+		//});
+		//count = COUNTRY[data.user.country]; 
 //	  $("#city_message").attr("opacity","0");
 //	  $("#city_message").animate({opacity: "255"},1500);
-		lastfm.geo.getMetros({country: count },{success: function(data){
-		met_array = data.metros.metro.sort(function names(a,b) { if(a.name.toLowerCase() < b.name.toLowerCase()) return -1; else if(a.name.toLowerCase() > b.name.toLowerCase())  return 1; else return 0;});
-		for(var mets in met_array){
-			$("#body").append("<input class = \"city\" name = \"" + mets + "\" type = \"text\" readonly = \"readonly\" value = \"" + met_array[mets].name + "\" onClick = \"return clickCity(this,event)\"> </input>");
-	$("input[name="+mets+"]").animate({
-	  	opacity: "0"
-	  }, 0, function(){
-	  	$(this).animate({
-	  opacity: "255"
-	  }, 20000);
-	  });
-			}
+		//lastfm.geo.getMetros({country: count },{success: function(data){
+		    //met_array = data.metros.metro.sort(function names(a,b) { if(a.name.toLowerCase() < b.name.toLowerCase()) return -1; else if(a.name.toLowerCase() > b.name.toLowerCase())  return 1; else return 0;});
+		    //for(var mets in met_array){
+		    //$("#body").append("<input class = \"city\" name = \"" + mets + "\" type = \"text\" readonly = \"readonly\" value = \"" + met_array[mets].name + "\" onClick = \"return clickCity(this,event)\"> </input>");
+		    //$("input[name="+mets+"]").animate({
+	  	//opacity: "0"
+		//}, 0, function(){
+	  	//$(this).animate({
+		// opacity: "255"
+		//}, 20000);
+		//});
+		//	}
 
 		/* Use data. */
 		//met = data.metros.metro[43].name;
-	}, error: function(code, message){
+		//}, error: function(code, message){
 		/* Show error message. */
-		document.write(message);
-	}});
+		//document.write(message);
+		//}});
 	  
-	  },error:function(data){}});
+		//},error:function(data){}});
 
+		run();
 	}
 	else{
 		indiv_run(myfield.value);
