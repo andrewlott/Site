@@ -1,4 +1,9 @@
+var MX;
+
 $(document).ready(function() {
+    $(".wrapper").mousemove(function(e){
+	MX = e.clientX;
+    });
     //bkg: 2 is off, 1 is on
     localStorage['bkg'] = localStorage['bkg'] || 1;//set on so toggle turns off
     if(localStorage['bkg'] == 1){
