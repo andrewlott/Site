@@ -1,0 +1,35 @@
+@font-face {
+	font-family: cool_font;
+	src: url('standard-7-plain-expanded-s.ttf') format("truetype");
+}
+body {
+	background-color:#FFFFFA;
+	background-image:url('shirt3.png');
+	background-repeat:no-repeat;
+	background-size: 100%;
+	background-attachment: fixed;
+	color: #3F474D;
+	font-family: 'cool_font';
+	font-weight: bold;
+	font-size: 29px;
+	text-align: center;
+}
+ 
+img {
+	border: 0;
+}
+ 
+#center {
+	width: 400px;
+	height:400px;
+	margin:200px auto;
+}
+
+a:link {color:#8B8386;
+		 text-decoration:none}      /* unvisited link */
+a:visited {color:#8B8386;
+		 text-decoration:none}  /* visited link */
+a:hover {color:#8B8386;
+		 text-decoration:underline}  /* mouse over link */
+a:active {color:#3F474D;
+		 text-decoration:underline}  /* selected link */

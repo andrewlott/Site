@@ -1,0 +1,41 @@
+@font-face {
+    font-family: cool_font;
+    src: url('../font/standard-7-plain-expanded-s.ttf') format("truetype");
+}
+body {
+    background-image:url('../img/test3.png');
+    //background-image:url(#bkg_canvas);
+    //background-repeat: repeat-x;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    color: #FFFAF0;
+    font-family: 'cool_font';
+    font-weight: bold;
+    font-size: 29px;
+    text-align: center;
+}
+ 
+img {
+	border: 0;
+
+}
+
+#some {
+    //width: 33%;
+    //border:solid;
+}
+
+#text {
+    //position: absolute;
+    z-index: 1;
+}
+
+a:link {color:#8B8878;
+		 text-decoration:none}      /* unvisited link */
+a:visited {color:#8B8878;
+		 text-decoration:none}  /* visited link */
+a:hover {color:#8B8878;
+		 text-decoration:underline}  /* mouse over link */
+a:active {color:#FFFAF0;
+		 text-decoration:underline}  /* selected link */
