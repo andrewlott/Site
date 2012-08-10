@@ -1,6 +1,6 @@
 @font-face {
 	font-family: cool_font;
-	src: url('standard-7-plain-expanded-s.ttf') format("truetype");
+	src: url('../standard-7-plain-expanded-s.ttf') format("truetype");
 }
 head {
 	font-size: 29px;
